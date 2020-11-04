@@ -1,0 +1,63 @@
+{% include 'header.html.twig' %}
+
+{% block body %}
+<form method="post">
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <div class="uk-section uk-section-muted uk-flex uk-flex-middle uk-animation-fade" uk-height-viewport>
+        <div class="uk-width-1-1">
+            <div class="uk-container">
+                <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
+                    <div class="uk-width-1-1@m">
+                        <div class="uk-margin uk-width-large uk-margin-auto uk-card uk-card-default uk-card-body uk-box-shadow-large">
+                            <h3 class="uk-card-title uk-text-center">
+                                 {% if app.user %}Welcome back small flare <span class="uk-alert-success">{{ app.user.username }}</span> {% else %} Darkness!{% endif %}
+                                {% if app.user %}
+                                    <div class="mb-3">
+                                        <a href="{{ path('app_logout') }}">Logout</a>
+                                    </div>
+                                {% endif %}
+                            </h3>
+                            <form>
+                                <div class="uk-margin">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon" uk-icon="icon: mail"></span>
+                                        <input class="uk-input uk-form-large form-control" type="text" value="{{ last_username }}" name="username" id="inputUsername" required autofocus>
+                                    </div>
+                                </div>
+                                <div class="uk-margin">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                                        <input class="uk-input uk-form-large form-control" type="password" name="password" id="inputPassword" required>
+                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"
+                                        >
+                                    </div>
+                                </div>
+                                {#
+                                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                                See https://symfony.com/doc/current/security/remember_me.html
+
+                                <div class="checkbox mb-3">
+                                    <label>
+                                        <input type="checkbox" name="_remember_me"> Remember me
+                                    </label>
+                                </div>
+                                #}
+                                <div class="uk-margin">
+                                    <button class="uk-button uk-button-primary uk-button-large uk-width-1-1">Login</button>
+                                </div>
+                                <div class="uk-text-small uk-text-center">
+                                    Not registered? <a href="/reg">Create an account</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+{% include 'bottom.html.twig' %}

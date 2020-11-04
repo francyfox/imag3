@@ -1,0 +1,129 @@
+{% include 'header.html.twig' %}
+
+{% block body %}
+    <div class="uk-dark uk-container uk-container-center uk-padding-top uk-margin-large-bottom">
+        <nav class="uk-navbar uk-margin-top uk-margin-large-bottom">
+            <ul class="uk-navbar-nav uk-hidden-small">
+                <li>
+                    <a href="/main">Frontpage</a>
+                </li>
+                <li class="uk-active">
+                    <a href="/cart">Cart</a>
+                </li>
+                <li>
+                    <a href="https://getuikit.com/docs/introduction">UI Kit</a>
+                </li>
+                <li>
+                    <a href="/reg">SING IN</a>
+                </li>
+                <li>
+                    <a href="/login">Login</a>
+                </li>
+            </ul>
+            <a href="#offcanvas" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas=""></a>
+        </nav>
+        <div class="uk-grid" data-uk-grid-margin="">
+            <div class="uk-width-medium-3-4 uk-row-first">
+                <h1 class="uk-heading-small uk-margin-bottom">
+                    Welcome home!
+                </h1>
+                <button uk-toggle="target: #add_new_product" type="button" class="uk-margin-bottom">
+                    ADD NEW PRODUCT
+                </button>
+                <button type="button" class="uk-form-success">TASK MANAGER</button>
+                <div uk-dropdown="mode: click">
+                    <h2 class="uk-modal-title">Tasks list</h2>
+                    <div class="uk-modal-body">
+                        s
+                    </div>
+                </div>
+
+                <div id="add_new_product" uk-modal>
+                    <div class="uk-modal-dialog uk-modal-body uk-dark">
+                        <h2 class="uk-modal-title">Create new product</h2>
+                        <form class="uk-form uk-flex uk-flex-column" method="get" action="/main" enctype="application/x-www-form-urlencoded | multipart/form-data | text/plain">
+                                    <input type="hidden" name="add" value="new">
+                                    <input type="hidden" name="category" value="">
+                                    <select size="1" name="category_id" id="cat_sel" class="uk-form-select uk-margin">
+                                        <option selected disabled>Категория</option>
+                                        {% for folders in cat_list %}
+                                            <option value="{{ folders.getCategoryId }}" id="{{ folders.getCategoryId }}">{{ folders.category }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="imgurls">Urls фото товаров:</label>
+                                    <textarea class="uk-textarea uk-margin" name="imgurls" id="ImgUrls" cols="30" rows="3"></textarea>
+                                    <input class="uk-text uk-margin" type="text" placeholder="Имя" name="name" required>
+                                    <label for="number">Количество на складе:</label>
+                                    <input class="uk-countdown-number uk-margin" type="number" name="number">
+                                    <input class="uk-text uk-margin" type="text" name="price" placeholder="Цена">
+                                    <input class="uk-button uk-button-primary uk-margin" type="submit" value="ADD PRODUCT">
+                        </form>
+                        <button class="uk-modal-close uk-position-top-right" type="button" uk-close></button>
+
+                    </div>
+                </div>
+                <div id="data-container" class="uk-grid paginationjs paginationjs paginationjs-theme-yellow">
+                    {% for product in products %}
+                        <div class="uk-width-medium-1-3 uk-box-shadow-medium uk-padding uk-card ">
+                             <h3 class="uk-heading-line uk-text-right">
+                                 <span>{{ product.name }} <i>. {{ product.id }}</i></span>
+                             </h3>
+                             <div class="uk-card-body">
+                                 <b>Category: </b><span>{{ product.category }}</span><br>
+                                 <b>Count: </b><span>{{ product.num }}</span><br>
+                                 <b>Price: </b><span>{{ product.price }}</span><br>
+                             </div>
+                            <div class="uk-inline">
+                                <button type="button">EDIT</button>
+                                <div uk-dropdown="mode: click">
+                                    <form method="get" action="/main" enctype="application/x-www-form-urlencoded | multipart/form-data | text/plain">
+                                        <input type="hidden" name="update" value="{{ product.id }}">
+                                        <input type="hidden" name="category" value="">
+                                        <select size="1" name="category_id" id="cat_sel" class="uk-select">
+                                            <option disabled>Категория</option>
+                                            {% for folders in cat_list %}
+                                                <option value="{{ folders.getCategoryId }}" id="{{ folders.getCategoryId }}">{{ folders.category }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="text" placeholder="Имя" name="name" class="uk-text" value="{{ product.name }}" required>
+                                        <label for="number">Количество на складе:</label>
+                                        <input type="number" name="number" class="uk-countdown-number" value="{{ product.num }}">
+                                        <input type="text" name="price" placeholder="Цена" class="uk-text" value="{{ product.price }}">
+                                        <input type="submit" class="uk-button" value="EDIT PRODUCT">
+                                    </form>
+                                </div>
+                                <button type="button" class="uk-form-danger">DELETE</button>
+                            </div>
+                         </div>
+                    {% endfor %}
+                        <div id="pagination-container"></div>
+                </div>
+
+            </div>
+            <div class="uk-width-medium-1-4">
+                <div class="uk-panel uk-panel-box uk-text-center">
+                    <img class="uk-border-circle" width="120" height="120" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjQsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkViZW5lXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMTIwcHgiIGhlaWdodD0iMTIwcHgiIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAxMjAgMTIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxyZWN0IGZpbGw9IiNGRkZGRkYiIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIi8+DQo8Zz4NCgk8cGF0aCBmaWxsPSIjRTBFMEUwIiBkPSJNMTA5LjM1NCw5OS40NzhjLTAuNTAyLTIuODA2LTEuMTM4LTUuNDA0LTEuOTAzLTcuODAxYy0wLjc2Ny0yLjM5Ny0xLjc5Ny00LjczMi0zLjA5My03LjAxMQ0KCQljLTEuMjk0LTIuMjc2LTIuNzc4LTQuMjE3LTQuNDU1LTUuODIzYy0xLjY4MS0xLjYwNC0zLjcyOS0yLjg4Ny02LjE0OC0zLjg0NmMtMi40MjEtMC45NTgtNS4wOTQtMS40MzgtOC4wMTctMS40MzgNCgkJYy0wLjQzMSwwLTEuNDM3LDAuNTE2LTMuMDIsMS41NDVjLTEuNTgxLDEuMDMyLTMuMzY3LDIuMTgyLTUuMzU1LDMuNDVjLTEuOTksMS4yNzEtNC41NzgsMi40MjEtNy43NjUsMy40NTENCgkJQzY2LjQxLDgzLjAzNyw2My4yMSw4My41NTIsNjAsODMuNTUyYy0zLjIxMSwwLTYuNDEtMC41MTUtOS41OTgtMS41NDZjLTMuMTg4LTEuMDMtNS43NzctMi4xODEtNy43NjUtMy40NTENCgkJYy0xLjk5MS0xLjI2OS0zLjc3NC0yLjQxOC01LjM1NS0zLjQ1Yy0xLjU4Mi0xLjAyOS0yLjU4OC0xLjU0NS0zLjAyLTEuNTQ1Yy0yLjkyNiwwLTUuNTk4LDAuNDc5LTguMDE3LDEuNDM4DQoJCWMtMi40MiwwLjk1OS00LjQ3MSwyLjI0MS02LjE0NiwzLjg0NmMtMS42ODEsMS42MDYtMy4xNjQsMy41NDctNC40NTgsNS44MjNjLTEuMjk0LDIuMjc4LTIuMzI2LDQuNjEzLTMuMDkyLDcuMDExDQoJCWMtMC43NjcsMi4zOTYtMS40MDIsNC45OTUtMS45MDYsNy44MDFjLTAuNTAyLDIuODAzLTAuODM5LDUuNDE1LTEuMDA2LDcuODM1Yy0wLjE2OCwyLjQyMS0wLjI1Miw0LjkwMi0wLjI1Miw3LjQ0DQoJCWMwLDEuODg0LDAuMjA3LDMuNjI0LDAuNTgyLDUuMjQ3aDEwMC4wNjNjMC4zNzUtMS42MjMsMC41ODItMy4zNjMsMC41ODItNS4yNDdjMC0yLjUzOC0wLjA4NC01LjAyLTAuMjUzLTcuNDQNCgkJQzExMC4xOTIsMTA0Ljg5MywxMDkuODU3LDEwMi4yOCwxMDkuMzU0LDk5LjQ3OHoiLz4NCgk8cGF0aCBmaWxsPSIjRTBFMEUwIiBkPSJNNjAsNzguMTZjNy42MiwwLDE0LjEyNi0yLjY5NiwxOS41Mi04LjA4OGM1LjM5Mi01LjM5Myw4LjA4OC0xMS44OTgsOC4wODgtMTkuNTE5DQoJCXMtMi42OTYtMTQuMTI2LTguMDg4LTE5LjUxOUM3NC4xMjYsMjUuNjQzLDY3LjYyLDIyLjk0Niw2MCwyMi45NDZzLTE0LjEyOCwyLjY5Ny0xOS41MTksOC4wODkNCgkJYy01LjM5NCw1LjM5Mi04LjA4OSwxMS44OTctOC4wODksMTkuNTE5czIuNjk1LDE0LjEyNiw4LjA4OSwxOS41MTlDNDUuODcyLDc1LjQ2NCw1Mi4zOCw3OC4xNiw2MCw3OC4xNnoiLz4NCjwvZz4NCjwvc3ZnPg0K" alt="">
+                    <h3>Author Name</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut.</p>
+                </div>
+                <div class="uk-panel">
+                    <h3 class="uk-panel-title">Category</h3>
+                    <ul class="uk-list uk-list-line">
+                        {% for cat in cat_list %}
+                            <li><a href="#{{ cat.category }}">{{ cat.getCategoryId }}. {{ cat.category }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="uk-panel">
+                    <h3 class="uk-panel-title">Social Links</h3>
+                    <ul class="uk-list">
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% include 'bottom.html.twig' %}
