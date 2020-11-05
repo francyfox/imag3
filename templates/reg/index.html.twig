@@ -1,20 +1,36 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello RegController!{% endblock %}
+{% include 'header.html.twig' %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="uk-section uk-section-muted uk-flex uk-flex-middle uk-animation-fade" uk-height-viewport>
+    <div class="uk-width-1-1">
+        <div class="uk-flex uk-flex-center uk-container uk-background-muted">
+            <div class="uk-card-default uk-dark uk-padding uk-width-1-2">
+                <div class="uk-grid-margin uk-grid uk-grid-stack" uk-grid>
+                    <div class="uk-width-1-1@m">
+                        <h3 class="uk-card-title uk-text-center">Last one small flare</h3>
+                        {{ form_start(form, {'action': path('reg'), 'method': 'POST'}) }}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/francyfox/Документы/imag3/src/Controller/RegController.php'|file_link(0) }}">src/Controller/RegController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/francyfox/Документы/imag3/templates/reg/index.html.twig'|file_link(0) }}">templates/reg/index.html.twig</a></code></li>
-    </ul>
+                        {{ form_rest(form) }}
+                            <div class="uk-margin">
+                                <button type="submit" class="uk-button uk-button-primary uk-button-large uk-width-1-1">Registration</button>
+                            </div>
+
+                            <div class="uk-text-small uk-text-center">
+                                Already have an account? <a href="/login" uk-switcher-item="1">Log in</a>
+                            </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+
+
 {% endblock %}
+    {% include 'bottom.html.twig' %}

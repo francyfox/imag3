@@ -3,13 +3,13 @@
 
 namespace App\Services\Auth;
 
-use DocRep\Agent;
+use App\Entity\User;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Registration
 {
     /**
-     * @Assert\Type(type="DocRep\Agent")
+     * @Assert\Type(type="App\Entity\User")
      */
     protected $user;
 
@@ -20,7 +20,7 @@ class Registration
     protected $roles;
 
 
-    public function setUser(Agent $user)
+    public function setUser(User $user)
     {
         $this->user = $user;
         $this->plain = $user->getPassword();
